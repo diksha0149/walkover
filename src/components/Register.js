@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+// import { useNavigate } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-
+import Profile from "./Profile";
 import { register } from "../actions/auth";
+import { Link, useHistory } from "react-router-dom";
 
 const required = (value) => {
   if (!value) {
@@ -52,7 +53,7 @@ const Register = () => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
@@ -60,10 +61,10 @@ const Register = () => {
   const { message } = useSelector(state => state.message);
   const dispatch = useDispatch();
 
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
-  };
+  // const onChangeUsername = (e) => {
+  //   const username = e.target.value;
+  //   setUsername(username);
+  // };
 
   const onChangeEmail = (e) => {
     const email = e.target.value;
@@ -83,7 +84,7 @@ const Register = () => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      dispatch(register(username, email, password))
+      dispatch(register(email, password))
         .then(() => {
           setSuccessful(true);
         })
@@ -92,7 +93,11 @@ const Register = () => {
         });
     }
   };
+  let history = useHistory();
 
+  const redirect = () => {
+    history.push('/Profile')
+  }
   return (
     <div className="col-md-12">
       <div className="card card-container">
@@ -105,7 +110,7 @@ const Register = () => {
         <Form onSubmit={handleRegister} ref={form}>
           {!successful && (
             <div>
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label htmlFor="username">Username</label>
                 <Input
                   type="text"
@@ -115,7 +120,7 @@ const Register = () => {
                   onChange={onChangeUsername}
                   validations={[required, vusername]}
                 />
-              </div>
+              </div> */}
 
               <div className="form-group">
                 <label htmlFor="email">Email</label>
@@ -142,7 +147,7 @@ const Register = () => {
               </div>
 
               <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
+                <button className="btn btn-primary btn-block" onClick={redirect}>Sign Up</button>
               </div>
             </div>
           )}

@@ -5,8 +5,9 @@ import { Redirect } from 'react-router-dom';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
-import { login } from "../actions/auth";
+import Register from "./Register";
+import { login, register } from "../actions/auth";
+import { Link } from "react-router-dom";
 
 const required = (value) => {
   if (!value) {
@@ -22,7 +23,7 @@ const Login = (props) => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -31,9 +32,9 @@ const Login = (props) => {
 
   const dispatch = useDispatch();
 
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const onChangeEmail = (e) => {
+    const email = e.target.value;
+    setEmail(email);
   };
 
   const onChangePassword = (e) => {
@@ -49,7 +50,7 @@ const Login = (props) => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      dispatch(login(username, password))
+      dispatch(login(email, password))
         .then(() => {
           props.history.push("/profile");
           window.location.reload();
@@ -65,25 +66,27 @@ const Login = (props) => {
   if (isLoggedIn) {
     return <Redirect to="/profile" />;
   }
-
+  const register=()=>{
+    return <Redirect to="/profile" />;
+  }
   return (
     <div className="col-md-12">
       <div className="card card-container">
-        <img
+        {/* <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
           alt="profile-img"
           className="profile-img-card"
-        />
+        /> */}
 
         <Form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Email</label>
             <Input
               type="text"
               className="form-control"
               name="username"
-              value={username}
-              onChange={onChangeUsername}
+              value={email}
+              onChange={onChangeEmail}
               validations={[required]}
             />
           </div>
@@ -99,7 +102,7 @@ const Login = (props) => {
               validations={[required]}
             />
           </div>
-
+         
           <div className="form-group">
             <button className="btn btn-primary btn-block" disabled={loading}>
               {loading && (
@@ -107,6 +110,7 @@ const Login = (props) => {
               )}
               <span>Login</span>
             </button>
+            <div>Don't have an account</div>
           </div>
 
           {message && (
